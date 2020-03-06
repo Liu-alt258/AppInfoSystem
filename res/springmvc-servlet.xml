@@ -11,34 +11,12 @@
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-        
-	<context:component-scan base-package="cn.smbms.controller"/>    
-    <mvc:annotation-driven/>
-    <mvc:resources mapping="/statics/**" location="/statics/" />
-	<!-- 完成视图的对应 -->
-	<!-- 对转向页面的路径解析。prefix：前缀， suffix：后缀 -->
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
-		<property name="prefix" value="/WEB-INF/jsp/"/>
-		<property name="suffix" value=".jsp"/>
-	</bean>
+	<!-- Controller包扫描配置 -->
+	<context:component-scan base-package="cn.appsys.controller"/>
 	
-	<!--  全局异常处理 -->
-	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-		<property name="exceptionMappings">
-			<props>
-				<prop key="java.lang.RuntimeException">login</prop>
-			</props>
-		</property>
-	</bean>
-	
-	<!-- 文件上传组件 -->
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="maxUploadSize" value="5000000"/>
-		<property name="defaultEncoding" value="UTF-8"/>
-	</bean>
-	
-<mvc:annotation-driven>
-	<mvc:message-converters>
+	<!-- 请求编码转化器,日期转化器 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
 			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
 				<property name="supportedMediaTypes">
 					<list>
@@ -62,9 +40,9 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
-	
+
 	<!-- 配置多视图解析器 -->
-<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 	<property name="defaultContentType" value="text/html"/>
 	<!-- 配置支持参数匹配 -->
 	<property name="favorParameter" value="true"/>
@@ -73,7 +51,7 @@
 		<map>
 			<entry key="html" value="text/html;charset=UTF-8"/>
 			<entry key="json" value="application/json;charset=UTF-8"/>
-			<entry key="xml" value="application/xml;charset=UTF-8"/>
+			<entry key="xml"  value="application/xml;charset=UTF-8"/>
 		</map>
 	</property>
 	<property name="viewResolvers">
@@ -85,6 +63,14 @@
 			</bean>
 		</list>
 	</property>
+</bean>       
+
+<!-- 配置文件上传 -->
+<bean id="multrtResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<property name="maxUploadSize" value="50000000"/>
+	<property name="defaultEncoding" value="UTF-8"/>
 </bean>
-	
+
+<!-- 静态资源导入 -->
+<mvc:resources location="/statics/" mapping="/statics/**"/>
 </beans>
